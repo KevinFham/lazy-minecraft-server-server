@@ -15,9 +15,10 @@ Rename `.example-env` to `.env` and configure as needed. Note that whitelist is 
 Allow server ports if ufw is enabled:
 
 ```bash
+# Server Port (in .env, this will be USE_HOST_PORT)
 sudo ufw allow 25565
 
-# SimpleVoiceChat Mod
+# SimpleVoiceChat Mod (in .env, this will be USE_HOST_PORT_VC)
 sudo ufw allow 24454/udp
 ```
 
