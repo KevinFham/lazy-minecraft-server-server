@@ -1,0 +1,12 @@
+[Unit]
+Description=Shutdown system if minecraft container is down
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/check_mc_container_down.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

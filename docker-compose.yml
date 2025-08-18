@@ -1,0 +1,13 @@
+#https://docker-minecraft-server.readthedocs.io/en/latest/misc/examples/#bedrock-compatible-server
+#https://github.com/joesturge/lazymc-docker-proxy
+#https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+
+networks:
+  minecraft-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.23.32.0/24
+
+include:
+  - goopcraft.yml

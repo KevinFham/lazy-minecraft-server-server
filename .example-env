@@ -1,0 +1,10 @@
+# MC Server Ports
+USE_HOST_PORT=25565
+USE_HOST_PORT_VC=24454
+
+# Players
+WHITELIST="User1,User2"
+OPS="User1"
+
+# CurseForge
+CF_API_KEY=""

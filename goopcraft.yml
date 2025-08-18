@@ -1,0 +1,89 @@
+services:
+  # Lazymc Proxy
+  lazymc:
+    image: ghcr.io/joesturge/lazymc-docker-proxy:latest
+    networks:
+      minecraft-network:
+        ipv4_address: 172.23.32.2
+    ports:                                              #Expose ports for direct access to server containers
+      - "${USE_HOST_PORT}:${USE_HOST_PORT}"
+    restart: unless-stopped
+    environment:
+      RUST_LOG: "trace"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro    #Provide access to docker commands
+      - ./goopcraft:/server:ro
+
+  # Minecraft Instance 1
+  mc:
+    image: itzg/minecraft-server:java17
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env
+    networks:
+      minecraft-network:
+        ipv4_address: 172.23.32.3
+    ports:
+      - "${USE_HOST_PORT_VC}:${USE_HOST_PORT_VC}/udp"
+    labels:
+      - lazymc.enabled=true
+      - lazymc.group=mc
+      - lazymc.port=25565
+      - lazymc.server.directory=/server
+      - lazymc.server.address=mc:25565
+      - lazymc.server.forge=true
+      - lazymc.public.version=1.20.1
+      - lazymc.public.protocol=763                      #https://minecraft.fandom.com/wiki/Protocol_version
+      - lazymc.time.sleep_after=600
+      - lazymc.time.minimum_online_time=600
+      - lazymc.motd.sleeping="☠ Server is sleeping\n§2☻ Join to start it up (DO NOT REFRESH YOUR SERVERS LIST)"
+      - lazymc.motd.starting="§2☻ Server is starting...\n§7⌛ Please wait... (DO NOT REFRESH YOUR SERVERS LIST)"
+    restart: no
+    environment:
+      # General
+      MEMORY: "12G" 
+      LOG_TIMESTAMP: true
+      ENABLE_ROLLING_LOGS: true
+      DEBUG: true
+      OVERRIDE_SERVER_PROPERTIES: true                  #Uncomment to manually manage server.properties
+
+      # Server
+      EULA: "TRUE"
+      TYPE: "FORGE"
+      FORGE_INSTALLER: "/data/mods/forge-1.20.1-47.4.0-installer.jar"
+      VERSION: 1.20.1
+      FORGE_VERSION: 47.4.0
+      #ICON: "https://cdn.discordapp.com/attachments/675193185743405057/1391533320302755860/ryan.png?ex=686c3de4&is=686aec64&hm=ce2f54df006aa7ccf06266cd3287882d9c50f0ec364a43d05651994b39e44018&"
+      MAX_PLAYERS: 8
+      ENABLE_COMMAND_BLOCK: "TRUE"
+      MAX_BUILD_HEIGHT: 512
+      VIEW_DISTANCE: 20
+      ALLOW_FLIGHT: "TRUE"
+      LEVEL_TYPE: "bclib:normal"
+      SPAWN_PROTECTION: 0
+      PLAYER_IDLE_TIMEOUT: 10
+      SERVER_NAME: goopcraft
+      SERVER_PORT: 25565
+      RCON_PORT: 25575
+      STOP_SERVER_ANNOUNCE_DELAY: 10
+      MOTD: "§2☻ Server open! Joining may take multiple attempts (DO NOT REFRESH YOUR SERVERS LIST)"
+
+      # CurseForge (https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/#pinning-modpack-and-mod-loader-versions)
+      CF_API_KEY: "${CF_API_KEY}"
+      #CF_SLUG: ""
+      #CF_FILE_ID: ""
+
+      # Whitelist
+      ENABLE_WHITELIST: true
+      WHITELIST: "${WHITELIST}"
+      OVERRIDE_WHITELIST: true
+
+      # OPS
+      OPS: "${OPS}"
+      OVERRIDE_OPS: true
+    volumes:
+      - ./goopcraft:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+  

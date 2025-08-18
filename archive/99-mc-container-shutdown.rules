@@ -1,0 +1,15 @@
+# Policy Kit v0.106
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.login1.power-off") {
+        try {
+            var result = polkit.spawnSync(["bash", "-c", `/usr/local/bin/is_mc_container_down.sh`]);
+            if (result.status === 0) {
+                return polkit.Result.YES;
+            } else {
+                return polkit.Result.NO;
+            }
+        } catch (e) {
+            return polkit.Result.NO;
+        }
+    }
+});
