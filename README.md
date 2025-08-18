@@ -8,6 +8,48 @@ I find installing docker on Ubuntu via `sudo apt install docker.io` much more co
 
 Follow the [docs](https://docs.docker.com/compose/install/linux/#install-using-the-repository) to install docker compose
 
-```bash
+## Deployment
 
+Rename `.example-env` to `.env` and configure as needed. Note that whitelist is on.
+
+Allow server ports if ufw is enabled:
+
+```bash
+sudo ufw allow 25565
+
+# SimpleVoiceChat Mod
+sudo ufw allow 24454/udp
+```
+
+Copy or create system links for:
+
+- `whitelisted_containers_for_shutdown.txt`
+
+  ```bash
+  cp whitelisted_containers_for_shutdown.txt /usr/local/etc/
+  ```
+
+- `scripts/check_mc_container_down.sh`
+
+  ```bash
+  cp scripts/check_mc_container_down.sh /usr/local/bin/
+  ```
+
+- `scripts/is_mc_container_down.sh` (Currently not being used)
+
+  ```bash
+  cp scripts/is_mc_container_down.sh /usr/local/bin/
+  ```
+
+- `minecraft-container-shutdown.service`
+
+  ```bash
+  cp minecraft-container-shutdown.service /etc/systemd/system/
+  ```
+
+Enable the shutdown service
+
+```bash
+sudo systemctl enable minecraft-container-shutdown.service
+sudo systemctl start minecraft-container-shutdown.service
 ```
