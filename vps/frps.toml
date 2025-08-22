@@ -1,0 +1,6 @@
+bindPort = {{ .Envs.FRP_SERVER_PORT }}
+
+allowPorts = [
+  { start = 25565, end = 25566 },
+  { start = 24454, end = 24455 },
+]

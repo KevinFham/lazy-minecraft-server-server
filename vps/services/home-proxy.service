@@ -1,0 +1,13 @@
+[Unit]
+Description=Proxy server via frp
+After=systemd-networkd.service
+Requires=systemd-networkd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/frps -c /usr/local/share/frp/frps.toml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
