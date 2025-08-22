@@ -1,0 +1,17 @@
+serverAddr = "{{ .Envs.FRP_SERVER_ADDR }}"
+serverPort = {{ .Envs.FRP_SERVER_PORT }}
+
+[[proxies]]
+name = "minecraft-server"
+type = "stcp"
+secretKey = "{{ .Envs.MC_FRP_SECRET_KEY }}"
+localIP = "127.0.0.1"
+localPort = 25565
+#remotePort = {{ .Envs.MC_SERVER_FRP_PORT }} 	# Handled by VPS
+
+[[proxies]]
+name = "minecraft-server-vc"
+type = "udp"
+localIP = "127.0.0.1"
+localPort = 24454
+remotePort = 24454

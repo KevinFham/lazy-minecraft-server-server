@@ -1,0 +1,13 @@
+[Unit]
+Description=Proxy for minecraft server
+After=minecraft-container-shutdown.service
+Requires=minecraft-container-shutdown.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/frpc -c /usr/local/share/frp/mc-server-proxy-server-frpc.toml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
