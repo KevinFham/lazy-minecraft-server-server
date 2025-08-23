@@ -37,8 +37,9 @@ services:
       - lazymc.public.protocol=763                      #https://minecraft.fandom.com/wiki/Protocol_version
       - lazymc.time.sleep_after=600
       - lazymc.time.minimum_online_time=600
-      - lazymc.motd.sleeping="☠ Server is sleeping\n§2☻ Join to start it up (DO NOT REFRESH YOUR SERVERS LIST)"
-      - lazymc.motd.starting="§2☻ Server is starting...\n§7⌛ Please wait... (DO NOT REFRESH YOUR SERVERS LIST)"
+      - lazymc.motd.sleeping=§7💤 Server is sleeping. §2Join§7 to start it up!
+      - lazymc.motd.starting=§7⌛ Server is §2starting§7! Please wait...
+      - lazymc.motd.stopping=§r🛑 §7Server is §rstopping§7...
     restart: no
     environment:
       # General
@@ -67,7 +68,7 @@ services:
       SERVER_PORT: 25565
       RCON_PORT: 25575
       STOP_SERVER_ANNOUNCE_DELAY: 10
-      MOTD: "§2☻ Server open! Joining may take multiple attempts (DO NOT REFRESH YOUR SERVERS LIST)"
+      MOTD: "§2☻ Server is online!"
 
       # CurseForge (https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/#pinning-modpack-and-mod-loader-versions)
       CF_API_KEY: "${CF_API_KEY}"
