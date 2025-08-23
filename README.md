@@ -20,6 +20,32 @@ Download [frp](https://github.com/fatedier/frp) onto both your VPS and the machi
 
 ## Deployment
 
+### VPS
+
+- `vps/mc-server-proxy-client-frpc.toml`
+
+  ```bash
+  cp mc-server-proxy-client-frpc.toml /usr/local/share/frp/
+  ```
+
+- `home-proxy.service`
+
+  ```bash
+  cp vps/home-proxy.service /etc/systemd/system/
+  sudo systemctl enable home-proxy.service
+  sudo systemctl start home-proxy.service
+  ```
+
+- `vps/mc-server-proxy.service`
+
+  ```bash
+  cp vps/mc-server-proxy.service /etc/systemd/system/
+  sudo systemctl enable mc-server-proxy.service
+  sudo systemctl status mc-server-proxy.service
+  ```
+
+### Minecraft Machine
+
 Rename `.example-env` to `.env` and configure as needed. Note that whitelist is on.
 
 Allow server ports if ufw is enabled:
@@ -40,6 +66,12 @@ Copy or create system links for:
   cp whitelisted_containers_for_shutdown.txt /usr/local/etc/
   ```
 
+- `mc-server-proxy-server-frpc.toml`
+
+  ```bash
+  cp mc-server-proxy-server-frpc.toml /usr/local/share/frp/
+  ```
+
 - `scripts/check_mc_container_down.sh`
 
   ```bash
@@ -52,15 +84,18 @@ Copy or create system links for:
   cp scripts/is_mc_container_down.sh /usr/local/bin/
   ```
 
-- `minecraft-container-shutdown.service`
+- `services/minecraft-container-shutdown.service`
 
   ```bash
-  cp minecraft-container-shutdown.service /etc/systemd/system/
+  cp services/minecraft-container-shutdown.service /etc/systemd/system/
+  sudo systemctl enable minecraft-container-shutdown.service
+  sudo systemctl start minecraft-container-shutdown.service
   ```
 
-Enable the shutdown service
+- `services/mc-server-proxy.service`
 
-```bash
-sudo systemctl enable minecraft-container-shutdown.service
-sudo systemctl start minecraft-container-shutdown.service
-```
+  ```bash
+  cp services/mc-server-proxy.service /etc/systemd/system/
+  sudo systemctl enable mc-server-proxy.service
+  sudo systemctl status mc-server-proxy.service
+  ```
