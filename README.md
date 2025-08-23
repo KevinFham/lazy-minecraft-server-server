@@ -20,6 +20,15 @@ Download [frp](https://github.com/fatedier/frp) onto both your VPS and the machi
 
 ## Deployment
 
+Allow server ports if ufw is enabled:
+
+```bash
+# FRP_SERVER_PORT depends on your frps configuration 
+sudo ufw allow $FRP_SERVER_PORT
+sudo ufw allow 25565
+sudo ufw allow 24454/udp
+```
+
 ### VPS
 
 - `vps/mc-server-proxy-client-frpc.toml`
