@@ -1,0 +1,12 @@
+[Unit]
+Description=Refresh VPS timer via Home REST Api server
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/refresh_vps_for_mc_containers.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
