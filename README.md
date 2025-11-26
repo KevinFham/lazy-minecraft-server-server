@@ -125,3 +125,16 @@ Copy or create system links for:
   sudo systemctl enable mc-server-proxy.service
   sudo systemctl status mc-server-proxy.service
   ```
+
+## Troubleshooting
+
+If you are having trouble finding your minecraft server on your client's multiplayer list, chances are that its a firewall issue. Ports for these should be open:
+
+#### VPS
+
+- Main proxy service port `FRP_SERVER_PORT`
+- Every visitor `bindPort` 
+
+#### Minecraft Server
+
+- Every port made accessible to LazyMC in the container network (As long as your container label configurations are correct)
