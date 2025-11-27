@@ -1,5 +1,5 @@
 serverAddr = "127.0.0.1"
-serverPort = {{ .Envs.FRP_SERVER_ADDRESS }}
+serverPort = {{ .Envs.FRP_SERVER_PORT }}
 
 [[visitors]]
 name = "minecraft-server-visitor"

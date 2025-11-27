@@ -29,12 +29,29 @@ sudo ufw allow 25565
 sudo ufw allow 24454/udp
 ```
 
+### frp Configuration
+
+Each frp configuration file (`vps/frps.toml`, `vps/mc-server-proxy-client-frpc.toml`, and `mc-server-proxy-server-frpc.toml`) has parameter fields denoted by `{{ .Envs.SOME_ENV_VALUE }}`. Replace these fields with the relevant ports or keys, making sure to remove the curly braces
+
+On a high level, the VPS hosts the frp server (typically on `FRP_SERVER_PORT=7000`) for client servers to connect to. The `frps` binary runs the `vps/frps.toml` configuration file to start this service. 
+
+The confusing part comes after this. The Minecraft Server (mc-server) connects to the frp server on the VPS at `FRP_SERVER_ADDR:FRP_SERVER_PORT`, whereafter the mc-server then serves a secret TCP (STCP) service (this will be the minecraft server port `25565`) to ask the VPS to securely proxy (in which the `frpc` binary on mc-server runs the `mc-server-proxy-server-frpc.toml` file).
+
+Then the VPS uses visitors to connect to the STCP services, proxying traffic it recieves from `MC_SERVER_FRP_PORT` to the end service on mc-server (e.g., port `mc-server:25565`). This is done using the `frpc` binary to run the `vps/mc-server-proxy-client-frpc.toml` file on the VPS.
+
+Adding more minecraft servers into this proxying configuration means simply adding more STCP `[[proxies]]` in `mc-server-proxy-server-frpc.toml` on mc-server and adding the same number of `[[visitors]]` in `vps/mc-server-proxy-client-frpc.toml` on the VPS.
+
 ### VPS
+
+- `vps/frps.toml`
+  ```bash
+  cp vps/frps.toml /usr/local/share/frp/
+  ```
 
 - `vps/mc-server-proxy-client-frpc.toml`
 
   ```bash
-  cp mc-server-proxy-client-frpc.toml /usr/local/share/frp/
+  cp vps/mc-server-proxy-client-frpc.toml /usr/local/share/frp/
   ```
 
 - `home-proxy.service`
@@ -108,3 +125,16 @@ Copy or create system links for:
   sudo systemctl enable mc-server-proxy.service
   sudo systemctl status mc-server-proxy.service
   ```
+
+## Troubleshooting
+
+If you are having trouble finding your minecraft server on your client's multiplayer list, chances are that its a firewall issue. Ports for these should be open:
+
+#### VPS
+
+- Main proxy service port `FRP_SERVER_PORT`
+- Every visitor `bindPort` 
+
+#### Minecraft Server
+
+- Every port made accessible to LazyMC in the container network (As long as your container label configurations are correct)
