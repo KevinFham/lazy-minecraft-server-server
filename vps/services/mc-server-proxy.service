@@ -6,7 +6,8 @@ Requires=home-proxy.service
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/frpc -c /usr/local/share/frp/mc-server-proxy-client-frpc.toml
-Restart=always
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
