@@ -6,7 +6,8 @@ Requires=systemd-networkd.service
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/frps -c /usr/local/share/frp/frps.toml
-Restart=always
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
