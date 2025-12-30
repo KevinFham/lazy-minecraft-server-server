@@ -6,7 +6,7 @@ Requires=docker.service
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/check_mc_container_down.sh
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]
